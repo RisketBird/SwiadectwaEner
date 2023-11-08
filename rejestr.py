@@ -10,20 +10,19 @@ class REJESTR:
     def __init__(self):
         self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options.add_experimental_option("detach", True)
+        self.driver = webdriver.Chrome(options=self.chrome_options)
+        self.driver.implicitly_wait(60)
 
     def open_webpage(self):
-        self.driver = webdriver.Chrome(options=self.chrome_options)
         self.driver.get("https://rejestrcheb.mrit.gov.pl/wykaz-swiadectw-charakterystyki-energetycznej-budynkow")
 
         cookie_notice = self.driver.find_element(By.XPATH, '//*[@id="cookieNotice"]/a[2]')
         cookie_notice.click()
 
     def set_view_to_100(self):
-        select = Select(self.driver.find_element(By.XPATH,
-                                                 '//*[@id="ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__list_rowCount"]'))
+        select = Select(self.driver.find_element(By.XPATH,'//*[@id="ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__list_rowCount"]'))
         select.select_by_value("100")
-        time.sleep(10)
-
+        find_element = self.driver.find_element(By.ID, "ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__99") #blokuje wyjscie z funkcji dopoki nie znajdzie 100 elementu
 
     def get_record(self, id):
         record_data =[]
@@ -55,4 +54,5 @@ class REJESTR:
 
         filter_data = self.driver.find_element(By.ID, 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__List___filter')
         filter_data.click()
-        time.sleep(20)
+
+        first_row_data = self.driver.find_element(By.XPATH, '//*[@id="ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__0"]/td[10]/div')
