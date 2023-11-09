@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 import re
-import time
+import datetime
 
 
 class REJESTR:
@@ -20,8 +20,9 @@ class REJESTR:
         cookie_notice.click()
 
     def set_view_to_100(self):
-        select = Select(self.driver.find_element(By.XPATH,'//*[@id="ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__list_rowCount"]'))
+        select = Select(self.driver.find_element(By.ID,'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__list_rowCount'))
         select.select_by_value("100")
+
         find_element = self.driver.find_element(By.ID, "ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__99") #blokuje wyjscie z funkcji dopoki nie znajdzie 100 elementu
 
     def get_record(self, id):
@@ -48,11 +49,44 @@ class REJESTR:
         number = list_number[0]
         return int(number)
 
+    def filter_data(self):
+        filter_data = self.driver.find_element(By.ID,'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__List___filter')
+        filter_data.click()
+
+    def check_if_data_is_present(self):
+        try:
+            nodata_box = self.driver.find_element(By.ID, 'nodata')
+        except:
+            print("chuj")
+
     def filter_data_by_voivodeship(self, voivodeship):
         voivodeship_input = self.driver.find_element(By.ID, 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___7')
         voivodeship_input.send_keys(voivodeship)
 
-        filter_data = self.driver.find_element(By.ID, 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__List___filter')
-        filter_data.click()
+        self.filter_data()
 
         first_row_data = self.driver.find_element(By.XPATH, '//*[@id="ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__0"]/td[10]/div')
+
+    def filter_data_by_from_date(self, date):
+        try:
+            datetime.date.fromisoformat(date)
+        except ValueError:
+            raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+        else:
+            select = Select(self.driver.find_element(By.ID, 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionComparator___1'))
+            select.select_by_value("le")
+
+            date_input = self.driver.find_element(By.ID, 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___1')
+            date_input.send_keys(date)
+
+            self.filter_data()
+
+            first_row_data = self.driver.find_element(By.XPATH, '//*[@id="ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__0"]/td[10]/div')
+
+    def filter_data_by_city(self, city):
+        city_input = self.driver.find_element(By.ID,'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___3')
+        city_input.send_keys(city)
+
+        self.filter_data()
+
+        first_row_data = self.driver.find_element(By.XPATH,'//*[@id="ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__0"]/td[10]/div')
