@@ -1,5 +1,4 @@
 import time
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
@@ -83,3 +82,7 @@ class REJESTR:
     def filter_data_by_city(self, city):
         city_input = self.driver.find_element(By.ID,'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___3')
         city_input.send_keys(city)
+
+    def filter_data_by_street(self, street):
+        street_input = self.driver.find_element(By.ID, 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___4')
+        street_input.send_keys(street)
