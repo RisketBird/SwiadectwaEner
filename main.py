@@ -1,4 +1,3 @@
-import time
 from rejestr import REJESTR
 from data_storage import EXCEL
 
