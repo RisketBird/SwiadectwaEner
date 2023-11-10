@@ -8,10 +8,12 @@ excel = EXCEL()
 
 rejestr.open_webpage()
 rejestr.set_view_to_100()
-rejestr.filter_data_by_city("Ostrowiec Świętokrzyski")
+rejestr.filter_data_by_voivodeship("Podlaskie")
+rejestr.filter_data_by_from_date("2016-07-06")
+rejestr.filter_data()
 rejestr.check_if_data_is_present()
 number_of_record = rejestr.get_number_of_record()
-excel.create_new_sheet("Ostrowiec Świętokrzyski")
+excel.create_new_sheet("Podlaskie")
 
 counter = 0
 

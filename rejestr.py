@@ -1,3 +1,5 @@
+import time
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
@@ -54,18 +56,17 @@ class REJESTR:
         filter_data.click()
 
     def check_if_data_is_present(self):
+        self.driver.implicitly_wait(10)
         try:
             nodata_box = self.driver.find_element(By.ID, 'nodata')
         except:
-            print("chuj")
+            print("cos")
+
+        self.driver.implicitly_wait(60)
 
     def filter_data_by_voivodeship(self, voivodeship):
         voivodeship_input = self.driver.find_element(By.ID, 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___7')
         voivodeship_input.send_keys(voivodeship)
-
-        self.filter_data()
-
-        first_row_data = self.driver.find_element(By.XPATH, '//*[@id="ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__0"]/td[10]/div')
 
     def filter_data_by_from_date(self, date):
         try:
@@ -73,20 +74,12 @@ class REJESTR:
         except ValueError:
             raise ValueError("Incorrect data format, should be YYYY-MM-DD")
         else:
+            date_input = self.driver.find_element(By.ID,'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___1')
+            date_input.send_keys(date)
             select = Select(self.driver.find_element(By.ID, 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionComparator___1'))
             select.select_by_value("le")
-
-            date_input = self.driver.find_element(By.ID, 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___1')
-            date_input.send_keys(date)
-
-            self.filter_data()
-
-            first_row_data = self.driver.find_element(By.XPATH, '//*[@id="ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__0"]/td[10]/div')
+            time.sleep(4)
 
     def filter_data_by_city(self, city):
         city_input = self.driver.find_element(By.ID,'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___3')
         city_input.send_keys(city)
-
-        self.filter_data()
-
-        first_row_data = self.driver.find_element(By.XPATH,'//*[@id="ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__0"]/td[10]/div')
