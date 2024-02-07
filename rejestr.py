@@ -14,6 +14,7 @@ class REJESTR:
         self.driver = webdriver.Chrome(options=self.chrome_options)  # creates a new instance of the Chrome WebDriver.
         # waits 60 sec before throwing a NoSuchElementException if an element is not immediately found
         self.driver.implicitly_wait(60)
+        self.open_webpage()
 
     def open_webpage(self):
         """
@@ -88,6 +89,7 @@ class REJESTR:
         filter_data = self.driver.find_element(By.ID,
                                                'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__List___filter')
         filter_data.click()
+        time.sleep(1)
 
     def check_if_data_is_present(self):
         self.driver.implicitly_wait(10)  # set implicitly wait to 10
@@ -95,10 +97,12 @@ class REJESTR:
             self.driver.find_element(By.ID, 'nodata')
         except:
             print("Data are present.")
+            self.driver.implicitly_wait(60)  # set implicitly wait back to 60
+            return True
         else:
             print("Data not found.")
-
-        self.driver.implicitly_wait(60)  # set implicitly wait back to 60
+            self.driver.implicitly_wait(60)  # set implicitly wait back to 60
+            return False
 
     def filter_data_by_voivodeship(self, voivodeship):
         """
@@ -108,6 +112,7 @@ class REJESTR:
         """
         voivodeship_input = self.driver.find_element(By.ID,
                                                 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___7')
+        voivodeship_input.clear()
         voivodeship_input.send_keys(voivodeship)
 
     def filter_data_by_from_date(self, date):
@@ -123,6 +128,7 @@ class REJESTR:
         else:
             date_input = self.driver.find_element(By.ID,
                                                 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___1')
+            date_input.clear()
             date_input.send_keys(date)
             select = Select(self.driver.find_element(By.ID,
                                         'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionComparator___1'))
@@ -143,6 +149,7 @@ class REJESTR:
         else:
             date_input = self.driver.find_element(By.ID,
                                                 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___2')
+            date_input.clear()
             date_input.send_keys(date)
             select = Select(self.driver.find_element(By.ID,
                                         'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionComparator___2'))
@@ -157,6 +164,7 @@ class REJESTR:
         """
         city_input = self.driver.find_element(By.ID,
                                               'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___3')
+        city_input.clear()
         city_input.send_keys(city)
 
     def filter_data_by_street(self, street):
@@ -167,6 +175,7 @@ class REJESTR:
         """
         street_input = self.driver.find_element(By.ID,
                                                 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___4')
+        street_input.clear()
         street_input.send_keys(street)
 
     def filter_data_by_number(self, number):
@@ -177,6 +186,7 @@ class REJESTR:
         """
         number_input = self.driver.find_element(By.ID,
                                                 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___5')
+        number_input.clear()
         number_input.send_keys(number)
 
     def filter_data_by_flat_number(self, flat_number):
@@ -187,6 +197,7 @@ class REJESTR:
         """
         flat_number_input = self.driver.find_element(By.ID,
                                                 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___6')
+        flat_number_input.clear()
         flat_number_input.send_keys(flat_number)
 
     def filter_data_by_county(self, county):
@@ -197,6 +208,7 @@ class REJESTR:
         """
         county_input = self.driver.find_element(By.ID,
                                                 'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___8')
+        county_input.clear()
         county_input.send_keys(county)
 
     def filter_data_by_borough(self, borough):
@@ -207,6 +219,7 @@ class REJESTR:
         """
         borough_input = self.driver.find_element(By.ID,
                                              'ox_bgk-sr_ZatwierdzoneSwiadectwoEnergetyczneWykaz__conditionValue___9')
+        borough_input.clear()
         borough_input.send_keys(borough)
 
     def filter_data_with_parameters(self, filter_param):
@@ -248,3 +261,9 @@ class REJESTR:
             self.filter_data()
         else:
             print("You have passed to little paramters.")
+
+    def close_web_browser(self):
+        self.driver.quit()
+
+    def refresh_web_browser(self):
+        self.driver.refresh()
