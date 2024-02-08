@@ -7,8 +7,7 @@ filters_list = data_to_filter_by.list_of_filters()
 
 rejestr = REJESTR()
 excel = EXCEL()
-excel.create_new_sheet()
-#
+
 for filters in filters_list:
     excel.add_address_headings()
     excel.add_record(filters)
@@ -23,7 +22,7 @@ for filters in filters_list:
     number_of_record = rejestr.get_number_of_record()
     counter = 0
     for i in range(number_of_record):
-        if counter <= 99:
+        if counter <= 9:
             record_data = rejestr.get_record(i)
             excel.add_record(record_data)
             counter = counter + 1
